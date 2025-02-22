@@ -2,6 +2,7 @@ package org.arzimanoff.hibernate.starter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.arzimanoff.hibernate.entity.Birthday;
+import org.arzimanoff.hibernate.entity.PersonalInfo;
 import org.arzimanoff.hibernate.entity.Role;
 import org.arzimanoff.hibernate.entity.User;
 import org.arzimanoff.hibernate.util.HibernateUtil;
@@ -17,9 +18,13 @@ public class HibernateRunner {
         // Transient
         var user = User.builder()
                 .username("arz")
-                .firstname("BBB")
-                .lastname("Arzimanov")
-                .birthDate(new Birthday(LocalDate.of(2005, 5, 19)))
+                .personalInfo(
+                        PersonalInfo.builder()
+                                .firstname("BBB")
+                                .lastname("Arzimanov")
+                                .birthdate(new Birthday(LocalDate.of(2005, 5, 19)))
+                                .build()
+                )
                 .role(Role.USER)
                 .build();
 
@@ -31,18 +36,17 @@ public class HibernateRunner {
             try(var session1 = sessionFactory.openSession()){
                 session1.beginTransaction();
                 // persistent к session1 и transient к session2
-                user.setFirstname("Ivan");
                 log.warn("Объект User был изменен: {}", user);
                 session1.saveOrUpdate(user);
                 log.debug("Объект User был сохранен: {} в сессии {}", user, session1);
                 session1.getTransaction().commit();
             }
 
-            try(var session2 = sessionFactory.openSession()){
-                session2.beginTransaction();
-                session2.delete(user);
-                session2.getTransaction().commit();
-            }
+//            try(var session2 = sessionFactory.openSession()){
+//                session2.beginTransaction();
+//                session2.delete(user);
+//                session2.getTransaction().commit();
+//            }
         } catch (Exception e){
             log.error("Exception: ", e);
             throw e;

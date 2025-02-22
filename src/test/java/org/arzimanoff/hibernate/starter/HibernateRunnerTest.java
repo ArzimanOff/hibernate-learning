@@ -3,6 +3,8 @@ package org.arzimanoff.hibernate.starter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 import org.arzimanoff.hibernate.entity.Birthday;
+import org.arzimanoff.hibernate.entity.PersonalInfo;
+import org.arzimanoff.hibernate.entity.Role;
 import org.arzimanoff.hibernate.entity.User;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +24,17 @@ class HibernateRunnerTest {
     @Test
     public void testHibernateApi() throws SQLException {
         var user = User.builder()
-                .username("arziman_off")
-                .firstname("AAA")
-                .lastname("Arz")
-                .birthDate(new Birthday(LocalDate.of(2005, 5, 19)))
+                .username("arz")
+                .personalInfo(
+                        PersonalInfo.builder()
+                                .firstname("BBB")
+                                .lastname("Arzimanov")
+                                .birthdate(new Birthday(LocalDate.of(2005, 5, 19)))
+                                .build()
+                )
+                .role(Role.USER)
                 .build();
+
         var sql = """
                 insert into
                 %s (%s)

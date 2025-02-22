@@ -18,11 +18,13 @@ import java.time.LocalDate;
 public class User {
     @Id
     private String username;
-    private String firstname;
-    private String lastname;
-    @Convert(converter = BirthdayConverter.class)
-    @Column(name = "birth_date")
-    private Birthday birthDate;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "firstname", column = @Column(name = "firstname")),
+            @AttributeOverride( name = "lastname", column = @Column(name = "lastname")),
+            @AttributeOverride( name = "birthdate", column = @Column(name = "birthdate"))
+    })
+    private PersonalInfo personalInfo;
     @Enumerated(EnumType.STRING)
     private Role role;
 }
