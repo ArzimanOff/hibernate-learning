@@ -1,10 +1,7 @@
 package org.arzimanoff.hibernate.starter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.arzimanoff.hibernate.entity.Birthday;
-import org.arzimanoff.hibernate.entity.PersonalInfo;
-import org.arzimanoff.hibernate.entity.Role;
-import org.arzimanoff.hibernate.entity.User;
+import org.arzimanoff.hibernate.entity.*;
 import org.arzimanoff.hibernate.util.HibernateUtil;
 
 import java.time.LocalDate;
@@ -15,17 +12,22 @@ public class HibernateRunner {
 
     public static void main(String[] args) {
 
+        Company company = Company.builder()
+                .name("Sber")
+                .build();
+
         // Transient
-        var user = User.builder()
+        User user = User.builder()
                 .username("arz")
                 .personalInfo(
                         PersonalInfo.builder()
-                                .firstname("BBB")
+                                .firstname("AAA")
                                 .lastname("Arzimanov")
                                 .birthdate(new Birthday(LocalDate.of(2005, 5, 19)))
                                 .build()
                 )
                 .role(Role.USER)
+                .company(company)
                 .build();
 
 
@@ -36,7 +38,8 @@ public class HibernateRunner {
             try(var session1 = sessionFactory.openSession()){
                 session1.beginTransaction();
                 // persistent к session1 и transient к session2
-                log.warn("Объект User был изменен: {}", user);
+
+
                 session1.saveOrUpdate(user);
                 log.debug("Объект User был сохранен: {} в сессии {}", user, session1);
                 session1.getTransaction().commit();

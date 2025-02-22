@@ -17,6 +17,8 @@ import java.time.LocalDate;
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String username;
     @Embedded
     @AttributeOverrides({
@@ -27,4 +29,8 @@ public class User {
     private PersonalInfo personalInfo;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
+    private Company company;
 }
