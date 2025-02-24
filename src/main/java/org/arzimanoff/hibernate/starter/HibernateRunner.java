@@ -16,6 +16,13 @@ public class HibernateRunner {
                 .name("Sber")
                 .build();
 
+        Profile profile = Profile.builder()
+                .language("RU")
+                .street("Mira 2")
+                .build();
+
+
+
         // Transient
         User user = User.builder()
                 .username("arz")
@@ -31,6 +38,7 @@ public class HibernateRunner {
                 .build();
 
 
+
         log.info("Объект User создан и является Transient : {}", user);
 
         try (var sessionFactory = HibernateUtil.buildSessionFactory()) {
@@ -41,6 +49,8 @@ public class HibernateRunner {
 
 
                 session1.saveOrUpdate(user);
+                profile.setUser(user);
+                session1.saveOrUpdate(profile);
                 log.debug("Объект User был сохранен: {} в сессии {}", user, session1);
                 session1.getTransaction().commit();
             }
